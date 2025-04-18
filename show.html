@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Details - Netflix Clone</title>
+
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+
+  <!-- Google Fonts (Optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+
+  <!-- Font Awesome for Icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  
+  <style>
+    /* Optional inline style for demonstration; you can move these to style.css */
+    #video-container {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black px-4">
+    <a class="navbar-brand" href="index.html">
+      <img src="img/logo.png" alt="Netflix Logo" height="30"/>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="browse.html">Browse</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">My List</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Movie Detail Section -->
+  <section class="movie-detail py-5">
+    <div class="container">
+      <div class="row">
+        <!-- Movie Poster & Details -->
+        <div class="col-md-6">
+          <img id="movie-image" src="img/movie1.jpg" class="img-fluid" alt="Movie Poster">
+        </div>
+        <div class="col-md-6">
+          <h2 id="movie-title">Movie Title</h2>
+          <p id="movie-description">Movie Description</p>
+          <p><strong>Release Date: </strong><span id="movie-release-date">January 1, 2025</span></p>
+          <p><strong>Rating: </strong><span id="movie-rating">9.0/10</span></p>
+          <!-- Watch Now Button -->
+          <button id="watch-now" class="btn btn-danger btn-lg mt-3">Watch Now</button>
+          <!-- YouTube Video Embed Container -->
+          <div id="video-container" class="mt-4">
+            <div class="ratio ratio-16x9">
+              <video id="movie-video" controls>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2025 Netflix Clone. All Rights Reserved.</p>
+      <p>
+        <a href="#" class="text-white">Terms of Use</a> | 
+        <a href="#" class="text-white">Privacy Policy</a>
+      </p>
+      <div>
+        <a href="#" class="text-white mx-3"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-white mx-3"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-white mx-3"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-white mx-3"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JS for Movie Details and Video Display -->
+  <script>
+    // Get the movie ID from the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId = urlParams.get('id');
+
+    // Movie Data - Sample objects with video file links
+    const movies = {
+      1: { 
+        title: 'Stranger Things', 
+        description: 'A science fiction horror series.', 
+        releaseDate: 'July 15, 2016', 
+        rating: '8.8/10', 
+        image: 'img/movie1.jpg',
+        video: 'img/stranger-things-trailer.mp4'  // Local video path
+      },
+      2: { 
+        title: 'Money Heist', 
+        description: 'A group of criminals plans a massive heist.', 
+        releaseDate: 'May 2, 2017', 
+        rating: '8.3/10', 
+        image: 'img/movie2.jpg',
+        video: 'img/money-heist-trailer.mp4'  // Local video path
+      },
+      3: { 
+        title: 'Breaking Bad', 
+        description: 'A chemistry teacher turned meth producer fights for his family.', 
+        releaseDate: 'January 20, 2008', 
+        rating: '9.5/10', 
+        image: 'img/movie3.jpg',
+        video: 'img/breaking-bad-trailer.mp4'  // Local video path
+      },
+      4: { 
+        title: 'The Witcher', 
+        description: 'A monster hunter embarks on a journey of self-discovery.', 
+        releaseDate: 'December 20, 2019', 
+        rating: '8.2/10', 
+        image: 'img/movie4.jpg',
+        video: 'img/the-witcher-trailer.mp4'  // Local video path
+      }
+    };
+
+    // Fetch and display movie data based on the ID
+    const movie = movies[movieId];
+
+    if (movie) {
+      document.getElementById('movie-title').innerText = movie.title;
+      document.getElementById('movie-description').innerText = movie.description;
+      document.getElementById('movie-release-date').innerText = movie.releaseDate;
+      document.getElementById('movie-rating').innerText = movie.rating;
+      document.getElementById('movie-image').src = movie.image;
+
+      // Watch Now button and video handling
+      const watchNowBtn = document.getElementById('watch-now');
+      const videoContainer = document.getElementById('video-container');
+      const movieVideo = document.getElementById('movie-video');
+
+      watchNowBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Set the video source to the local file
+        movieVideo.src = movie.video;
+        // Display the video container
+        videoContainer.style.display = 'block';
+        // Optionally hide the button after clicking
+        watchNowBtn.style.display = 'none';
+      });
+    } else {
+      document.getElementById('movie-title').innerText = 'Movie not found';
+      document.getElementById('movie-description').innerText = 'Sorry, we couldn’t find this movie.';
+    }
+  </script>
+</body>
+</html>
